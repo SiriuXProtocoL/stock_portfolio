@@ -2,7 +2,23 @@
 
 {% block content %}
 
-<h1>Hello World Stocks</h1>
+{% if api %}
+    {% if api == "Error..." %}
+        There was a problem with your ticker symbol... please try again...
+    
+    {% else %}
+
+        <h1>{{ api.companyName }}</h1><br/>
+        Price: ${{ api.latestPrice }}<br/>
+        previousClose: {{ api.previousClose }}<br/>
+        marketCap: {{ api.marketCap }}<br/>
+        Year to Date Change: {{ api.ytdChange }}<br/>
+        week52High: {{ api.week52High }}<br/>
+        week52Low: {{ api.week52Low }}<br/>
+
+    {% endif %}
+
+{% endif %}
 
 {% endblock %}
 

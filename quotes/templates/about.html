@@ -2,6 +2,17 @@
 
 {% block content %}
 
-<h1>Im a Trader</h1>
+{% if api %}
+    {% if api == "Error..." %}
+        There was a problem with your ticker symbol... please try again...
+    
+    {% else %}
+        {% for key, value in api.items %}
+            {{ key }} : {{ value }} <br/>
+        {% endfor %}
+
+    {% endif %}
+
+{% endif %}
 
 {% endblock %}
