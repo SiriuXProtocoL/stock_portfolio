@@ -23,10 +23,14 @@
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{% url 'about' %}">About</a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'add_stock' %}">Add Stock</a>
+              </li>
             </ul>
-            <form class="d-flex">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit">Search</button>
+            <form class="d-flex" action="{% url 'home' %}" method="POST">
+              {% csrf_token %}
+              <input class="form-control me-2" name="ticker_symbol" type="search" placeholder="Get Quote" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Qoute</button>
             </form>
           </div>
         </div>
