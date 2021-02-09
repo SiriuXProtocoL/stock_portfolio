@@ -2,17 +2,48 @@
 
 {% block content %}
 
-<form class="d-flex" action="{% url 'add_stock' %}" method="POST">
+<form class="d-flex" action="{% url 'add_stock' %}" method='POST'>
     {% csrf_token %}
-    <input class="form-control me-2" name="ticker_symbol" type="search" placeholder="Add Symbol" aria-label="Search">
+    <input class="form-control me-2" name="ticker" type="search" placeholder="Add Symbol" aria-label="Search">
     <button class="btn btn-outline-success" type="submit">Add Stock</button>
   </form>
 
   <br/>
   <br/>
 
-{% for item in ticker %}
-    {{ item }} | {{ item.id }}<br/>
-{% endfor %}
+
+  <table class="table table-light table-striped table-bordered table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th scope="col">Company Name</th>
+        <th scope="col">Stock Price</th>
+        <th scope="col">Previous Close</th>
+        <th scope="col">Market Capitilization</th>
+        <th scope="col">52 Week High</th>
+        <th scope="col">52 Week Low</th>
+        <th scope="col">YTD Change</th>
+      </tr>
+    </thead>
+    <tbody>
+{% if ticker %}
+      {% for list_item in output %}
+      <tr>
+        <th scope="row"> {{ list_item.companyName }}</th>
+        <td> ${{ list_item.latestPrice }}</td>
+        <td> {{ list_item.previousClose }}</td>
+        <td> {{ list_item.marketCap }}</td>
+        <td> ${{ list_item.week52High }}</td>
+        <td> ${{ list_item.week52Low }}</td>
+        <td> {{ list_item.ytdChange }}%</td>
+      </tr>
+      {% endfor %}
+      
+    
+
+    </tbody>
+  </table>
+  {% endif %}
+
+
 
 {% endblock %}

@@ -16,7 +16,7 @@ def home(request):
     if request.method == "POST":
 
         #From the form input name field
-        ticker = request.POST['ticker_symbol']
+        ticker = request.POST['ticker']
 
         api_request = requests.get("https://cloud.iexapis.com/stable/stock/" + ticker + "/quote?token=pk_183750c8ece6430f84f747bfb19be397")
     
@@ -57,5 +57,40 @@ def add_stock(request):
             return redirect('add_stock')
 
     else:
+        #get all items in the databse
         ticker = stock_db.objects.all()
-        return render(request, 'add_stock.html', {"ticker": ticker})
+
+        #A list to save the looped api data's
+        output = []
+
+        #Loop through the items to pull the data of all
+        for tick in ticker:
+            api_request = requests.get("https://cloud.iexapis.com/stable/stock/" + str(tick) + "/quote?token=pk_183750c8ece6430f84f747bfb19be397")
+
+            try:
+                #conver to json
+                api = json.loads(api_request.content)
+                #saving the item to output list
+                output.append(api)
+
+            #if there api does not return anything as json
+            except Exception as e:
+                api = "Error..."
+
+        return render(request, 'add_stock.html', {"ticker": ticker, "output": output})
+
+#delete by defalt primary key ID
+def delete(request, stock_id):
+    #getiing a specific column from our database
+    item = stock_db.objects.get(pk=stock_id)
+    #delete the item
+    item.delete()
+    messages.success(request, ("Stock has been Deleted!"))
+    return redirect(delete_stock)
+
+def delete_stock(request):
+
+    ticker = stock_db.objects.all()
+
+    return render(request, 'delete_stock.html', {"ticker": ticker})
+
